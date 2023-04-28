@@ -18,6 +18,5 @@ jobs:
           git remote add upstream https://github.com/6dylan6/jdpro.git
           git fetch upstream
 
-          git checkout --track origin/main
           git merge --no-edit upstream/main
           git push origin main
