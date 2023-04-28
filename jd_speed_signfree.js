@@ -15,6 +15,9 @@ let cookiesArr = [],
     cookie,
     msg = []
 
+// edited
+const axios = require('axios');
+
 const activityId = 'PiuLvM8vamONsWzC0wqBGQ'
 
 if ($.isNode()) {
@@ -45,6 +48,18 @@ const JD_API_HOST = 'https://api.m.jd.com/';
     } else {
         console.error('无消息,推送错误')
         await notify.sendNotify($.name + '错误!!', "无消息可推送!!")
+    }
+
+    // edited
+    if (err_flag) {
+        axios
+          .get(
+            'https://n.i207m.top/?token=motify2020&msg=' +
+              encodeURIComponent(msg.join('\n'))
+          )
+          .then(() => {
+            console.log('Sent to Motify');
+          });
     }
 })()
 .catch((e) => {
@@ -133,6 +148,10 @@ function sign(orderId) {
                         msg_temp = $.productName + ' 签到成功'
                     } else {
                         msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                        // edited
+                        if (data.errMsg != '已经签到过了') {
+                            err_flag = true;
+                        }
                     }
                     console.log(msg_temp)
                     msg.push(msg_temp)
@@ -161,6 +180,8 @@ function cash(orderId) {
                         msg_temp = $.productName + ' 提现成功'
                     } else {
                         msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                        // edited
+                        err_flag = true;
                     }
                     console.log(msg_temp)
                     msg.push(msg_temp)
@@ -561,6 +582,14 @@ function Env(t, e) {
         }
         logErr(t, e) {
             const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
+            axios
+                .get(
+                    'https://n.i207m.top/?token=motify2020&msg=' +
+                    encodeURIComponent(`签到免单异常`)
+                )
+                .then(() => {
+                    console.log('Sent to Motify');
+                });
             s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t)
         }
         wait(t) {
