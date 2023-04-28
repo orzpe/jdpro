@@ -1,0 +1,23 @@
+name: Merge upstream branches
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '5 */3 * * *'
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Merge upstream
+        run: |
+          git config --global user.name 'orzpe'
+          git config --global user.email 'orzpe@users.noreply.github.com'
+
+          git remote add upstream https://github.com/6dylan6/jdpro.git
+          git fetch upstream
+
+          git checkout --track origin/main
+          git merge --no-edit upstream/main
+          git push origin main
