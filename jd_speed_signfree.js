@@ -17,6 +17,7 @@ let cookiesArr = [],
 
 // edited
 const axios = require('axios');
+let err_flag = false;
 
 const activityId = 'PiuLvM8vamONsWzC0wqBGQ'
 
